@@ -1,5 +1,5 @@
 {
-  "name": "jsMarsTime",
+  "name": "jsmarstime",
   "version": "1.0.0",
   "description": "Mars time conversion functions ",
   "main": "marstime.js",
