@@ -9,7 +9,7 @@ The library is available under the Modified BSD license. Please retain the refer
 
 
 ### References
-[Allison and McEwen (2000)] :  A post-Pathfinder evaluation of areocentric solar coordinates with improved timing recipes for Mars seasonal/diurnal climate studies. Planet. Space Sci. 48, 215-235.   
+[Allison and McEwen (2000)] :  A post-Pathfinder evaluation of areocentric solar coordinates with improved timing recipes for Mars seasonal/diurnal climate studies. Planet. Space Sci. 48, 215-235. doi:10.1016/S0032-0633(99)00092-6   
 [Allison (1997)] :  Accurate analytic representations of solar time and seasons on Mars with applications to the Pathfinder/Surveyor missions. Geophys. Res. Lett., 24, 1967-1970, doi:10.1029/97GL01950.
 
 
