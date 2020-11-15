@@ -1,0 +1,10 @@
+{
+  "name": "jsMarsTime",
+  "version": "1.0.0",
+  "description": "Mars time conversion functions ",
+  "main": "marstime.js",
+  "author": "eelsirhc",
+  "license": "MIT",
+  "dependencies": {
+  }
+}
