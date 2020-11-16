@@ -22,7 +22,7 @@ function protected_mod(value, modulus)
     if (value < 0){
     return (value -Math.floor(value/modulus)*modulus) % modulus}
 	else
-	{return value % modulus};
+	{return value % modulus;}
 }
 
 function west_to_east(west){
