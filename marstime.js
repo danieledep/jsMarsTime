@@ -438,7 +438,7 @@ function solar_zenith(longitude,latitude, j2000_ott){
 // latitude = north latitude
 // j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt)
 
-function solar_elevation(longitude, latitude, j2000_ott	  
+function solar_elevation(longitude, latitude, j2000_ott) {	  
     var Z = solar_zenith(longitude, latitude, j2000_ott);
     return 90. - Z;
 }
