@@ -28,7 +28,7 @@ function west_to_east(west){
     //Convert from aerographic west longitude to aerocentric east longitude,
     //or vice versa. 
     //west = west longitude
-    east = (360 - west) ;//+ 0.271; Removing 0.271 degrees because I'm not sure it's relevent anymore.
+    var east = (360 - west) ;//+ 0.271; Removing 0.271 degrees because I'm not sure it's relevent anymore.
     return protected_mod(east, 360.);//javascript has a different interpretation of mod on negative numbers, protect us from the insanity
 }
 
@@ -403,4 +403,4 @@ function solar_azimuth(longitude, latitude, j2000_ott){
 
 
 
-export { protected_mod, west_to_east };
+export { protected_mod, west_to_east, east_to_west, j2000_epoch, mills, julian, utc_to_tt_offset, julian_tt, j2000_offset_tt, Mars_Mean_Anomaly, FMS_Angle, alpha_perturbs, equation_of_center, Mars_Ls_String, equation_of_time, j2000_from_Mars_Solar_Date, j2000_ott_from_Mars_Solar_Date, Mars_Solar_Date, Clancy_Year, Mars_Year, Coordinated_Mars_Time, Local_Mean_Solar_Time, Local_True_Solar_Time, subsolar_longitude, solar_declination, heliocentric_distance, heliocentric_longitude, heliocentric_latitude, hourangle, solar_zenith, solar_elevation, solar_azimuth};
