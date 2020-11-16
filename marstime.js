@@ -285,8 +285,8 @@ function Mars_Ls(j2000_ott) {
 }
 
 // Equation of Time, to convert between Local Mean Solar Time
-//  and Local True Solar Time, and make pretty analemma plots
-//  j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt)
+// and Local True Solar Time, and make pretty analemma plots
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt)
 
 function equation_of_time(j2000_ott) {
   var ls = (Mars_Ls(j2000_ott) * Math.PI) / 180;
@@ -300,7 +300,7 @@ function equation_of_time(j2000_ott) {
   return EOT;
 }
 
-// Returns j200 based on MSD
+// Returns j2000 based on MSD
 
 function j2000_from_Mars_Solar_Date(msd) {
   var j2000_ott = (msd + 0.00096 - 44796.0) * 1.027491252 + 4.5;
