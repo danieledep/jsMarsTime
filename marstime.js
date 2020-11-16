@@ -20,7 +20,6 @@
 
 	
 function protected_mod(value, modulus) {
-	
     if (value < 0){
     return (value - Math.floor(value / modulus) * modulus) % modulus}
 	else
@@ -33,7 +32,6 @@ function protected_mod(value, modulus) {
 // west = west longitude
 
 function west_to_east(west) {
-	
     var east = (360 - west) ;		//+ 0.271; Removing 0.271 degrees because I'm not sure it's relevent anymore.
     return protected_mod(east, 360.);	//javascript has a different interpretation of mod on negative numbers, protect us from the insanity
 }
@@ -41,8 +39,7 @@ function west_to_east(west) {
 
 // east = east longitude
 
-function east_to_west(east) {
-		
+function east_to_west(east) {	
     return west_to_east(east);
 }
 
@@ -51,7 +48,6 @@ function east_to_west(east) {
 // no inputs
 
 function j2000_epoch(){
-	
     return 2451545.0;
 }
 
