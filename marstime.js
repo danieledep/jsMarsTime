@@ -1,5 +1,7 @@
-/*Copyright (c) 2011, Christopher Lee eelsirhc@gmail.com
- All rights reserved.
+/*
+
+Copyright (c) 2011, Christopher Lee eelsirhc@gmail.com
+All rights reserved.
 Mars Calendar and orbit calculation based on Allison and McEwen (2000), Allison (1997)
 
 Allison, M., and M. McEwen 2000. A post-Pathfinder evaluation of aerocentric solar coordinates with improved timing recipes for Mars seasonal/diurnal climate studies. Planet. Space Sci. 48, 215-235
@@ -12,58 +14,70 @@ http://www.giss.nasa.gov/tools/mars24/
      Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
      Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
  Neither the name of the <ORGANIZATION> nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
- 	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ */ 
 
 	
-function protected_mod(value, modulus)
-{
+function protected_mod(value, modulus) {
+	
     if (value < 0){
-    return (value -Math.floor(value/modulus)*modulus) % modulus}
+    return (value - Math.floor(value / modulus) * modulus) % modulus}
 	else
-	{return value % modulus;}
+	{ return value % modulus; }
 }
 
-function west_to_east(west){
+function west_to_east(west) {
+	
     //Convert from aerographic west longitude to aerocentric east longitude,
     //or vice versa. 
     //west = west longitude
-    var east = (360 - west) ;//+ 0.271; Removing 0.271 degrees because I'm not sure it's relevent anymore.
-    return protected_mod(east, 360.);//javascript has a different interpretation of mod on negative numbers, protect us from the insanity
+	
+    var east = (360 - west) ;		//+ 0.271; Removing 0.271 degrees because I'm not sure it's relevent anymore.
+    return protected_mod(east, 360.);	//javascript has a different interpretation of mod on negative numbers, protect us from the insanity
 }
 
-function east_to_west(east){
+function east_to_west(east) {
+	
     //east = east longitude
+	
     return west_to_east(east);
 }
 
 
 function j2000_epoch(){
- //   """Returns the j2000 epoch as a float"""
+	
+ // Returns the j2000 epoch as a float
  // no inputs
+	
     return 2451545.0;
 }
 
 
 function mills(){
-//    """Returns the current time in milliseconds Math.since Jan 1 1970"""
-//no inputs
-    d=new Date;
+
+// Returns the current time in milliseconds Math.since Jan 1 1970
+// no inputs
+	
+    d = new Date;
     return d.getTime();
 }
 
 
 function julian(m){
-/*    """Returns the julian day number given milliseconds Math.since Jan 1 1970"""
- m = milliseconds*/
+	
+// Returns the julian day number given milliseconds Math.since Jan 1 1970
+// m = milliseconds
+	
     return 2440587.5 + (m/8.64e7);
 }
 
 function utc_to_tt_offset(jday){
-/*     """Returns the offset in seconds from a julian date in Universal Coordinated Time (UTC)
-     to a Julian day in Terrestrial Time (TT)"""
-     jday=julian day
-     */
+	
+// Returns the offset in seconds from a julian date in Universal Coordinated Time (UTC)
+// to a Julian day in Terrestrial Time (TT)
+// jday=julian day
+
 
     var jday_vals = new Array(-2441318.5, 0.,    182.,    366.,
                                 731.,   1096.,   1461.,   1827.,
@@ -73,8 +87,7 @@ function utc_to_tt_offset(jday){
                                 8217.,   8766.,   9313.,   9862.,
                                 12419.,  13515., 14792.);
                        
-    for(var c=0;c<jday_vals.length;c++)
-    {jday_vals[c] += 2441317.5;}
+    for(var c = 0; c < jday_vals.length; c++) {jday_vals[c] += 2441317.5;}
     
     var offset_vals = new Array(-32.184,10., 11.0, 12.0, 13.0,
                                               14.0, 15.0, 16.0, 17.0, 18.0,
@@ -83,14 +96,13 @@ function utc_to_tt_offset(jday){
                                               29.0, 30.0, 31.0, 32.0, 33.0,
                                               34.0, 35.0);
     
-    for(var c=0;c<offset_vals.length;c++)
-    {offset_vals[c] += 32.184;}
+    for(var c = 0; c < offset_vals.length; c++) {offset_vals[c] += 32.184;}
     
     var l;
     if (jday > jday_vals[jday_vals.length-1])
-    {l=jday_vals.length-1;}
+    	{ l = jday_vals.length-1; }
     else if(jday < jday_vals[0])
-    {l=0;}
+    	{ l=0; }
     else{
         for(l=0;l<jday_vals.length-2;l++)
         {
@@ -104,37 +116,44 @@ function utc_to_tt_offset(jday){
 
  
 function julian_tt(jday_utc){
-/*     """Returns the TT Julian day given a UTC Julian day"""
-jday_utc=julian day in UTC
-*/
+	
+// Returns the TT Julian day given a UTC Julian day
+// jday_utc=julian day in UTC
 
      var jdtt = jday_utc + utc_to_tt_offset(jday_utc)/86400.;
      return jdtt;
  }
  
 function j2000_offset_tt(jday_tt){
-/*     """Returns the julian day offset Math.since the J2000 epoch"""
-jday_tt = julian day in terrestrial time*/
+	
+// Returns the julian day offset Math.since the J2000 epoch
+// jday_tt = julian day in terrestrial time
+	
      return (jday_tt - j2000_epoch());
 } 
 	
 function Mars_Mean_Anomaly(j2000_ott){
-/*     """Calculates the Mars Mean Anomaly given a j2000 julian day offset"""
-    j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+	
+// Calculates the Mars Mean Anomaly given a j2000 julian day offset
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt)
+	
      var M = 19.3870 + 0.52402075 * j2000_ott;
      return protected_mod(M, 360.);
 } 
 
 function FMS_Angle(j2000_ott){
-/*     """Returns the Fictional Mean Sun angle"""
-    j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+	
+// Returns the Fictional Mean Sun angle
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) 
+	
    var alpha_fms = 270.3863 + 0.52403840 * j2000_ott;
    return protected_mod(alpha_fms, 360.);
 }
 
 function alpha_perturbs(j2000_ott){
-/*     """Returns the perturbations to apply to the FMS Angle from orbital perturbations"""
-    j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+// Returns the perturbations to apply to the FMS Angle from orbital perturbations
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) 
+	
      var array_A   = new Array(0.0071, 0.0057, 0.0039, 0.0037, 0.0021, 0.0020, 0.0018);
      var array_tau = new Array(2.2353, 2.7543, 1.1177, 15.7866, 2.1354, 2.4694, 32.8493);
      var array_phi = new Array(49.409, 168.173, 191.837, 21.736, 15.704, 95.528, 49.095);
@@ -142,15 +161,17 @@ function alpha_perturbs(j2000_ott){
      var pbs = 0;
      for (var i=0;i<array_A.length;i++)
      {
-        pbs+=array_A[i]*Math.cos(((0.985626 * j2000_ott/array_tau[i]) + array_phi[i])*Math.PI/180.);
+        pbs += array_A[i] * Math.cos(((0.985626 * j2000_ott/array_tau[i]) + array_phi[i]) * Math.PI/180.);
     }
      return pbs;
 }
 
 function equation_of_center(j2000_ott){
-/*     """The true anomaly (v) - the Mean anomaly (M)"""
-    j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
-      var M = Mars_Mean_Anomaly(j2000_ott)*Math.PI/180.;
+	
+// The true anomaly (v) - the Mean anomaly (M)
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt)
+	
+     var M = Mars_Mean_Anomaly(j2000_ott)*Math.PI/180.;
      var pbs = alpha_perturbs(j2000_ott);
  
      var val = (10.691 + 3.0e-7 * j2000_ott)*Math.sin(M)
@@ -164,8 +185,10 @@ function equation_of_center(j2000_ott){
  }
 	
 function Mars_Ls_String(ls){
-    /*given the Ls, returns a string representation of the approximate 'season'
-        j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+	
+// given the Ls, returns a string representation of the approximate 'season'
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt)
+	
     var d=new Array(0,30,60,90,120,150,180,210,240,270,300,330)
     var s=new Array("Early NH Spring",
                     "NH Spring",
@@ -180,7 +203,7 @@ function Mars_Ls_String(ls){
                     "NH Winter",
                     "Late NH Winter");
     var i;                     
-    for(i=0;i<d.length-2;i++)
+    for(i = 0; i< d.length-2; i++)
     {
         if(ls>d[i] && ls<d[i+1])
         {
@@ -192,8 +215,10 @@ function Mars_Ls_String(ls){
 }
 
 function Mars_Ls(j2000_ott){
-/*     """Returns the Areocentric solar longitude (aka Ls)"""
-    j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+	
+// Returns the Areocentric solar longitude (aka Ls)
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) 
+	
      var alpha = FMS_Angle(j2000_ott);
      var v_m   = equation_of_center(j2000_ott);
 
@@ -203,9 +228,11 @@ function Mars_Ls(j2000_ott){
  }
 
 function equation_of_time(j2000_ott){
-/*    """Equation of Time, to convert between Local Mean Solar Time
-    and Local True Solar Time, and make pretty analemma plots"""
-        j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+	
+// Equation of Time, to convert between Local Mean Solar Time
+//  and Local True Solar Time, and make pretty analemma plots
+//  j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt
+	
     var ls = Mars_Ls(j2000_ott)*Math.PI/180.;
 
     var EOT = 2.861*Math.sin(2*ls)
@@ -216,31 +243,38 @@ function equation_of_time(j2000_ott){
 }
 
 function j2000_from_Mars_Solar_Date(msd){
-/*     """Returns j200 based on MSD"""*/
+	
+// Returns j200 based on MSD
+	
      var j2000_ott = ((msd + 0.00096 - 44796.0) * 1.027491252)+4.5;
      return j2000_ott;
-     }
+}
  
 function j2000_ott_from_Mars_Solar_Date(msd){ 
-/*     """Returns j200 based on MSD"""
-msd = mars solar date */
+	
+// Returns j200 based on MSD
+// msd = mars solar date
+	
      var j2000 = j2000_from_Mars_Solar_Date(msd);
      var j2000_ott = julian_tt(j2000+j2000_epoch());
      return j2000_ott-j2000_epoch();
 } 
 
 function Mars_Solar_Date(j2000_ott){
-/*     """Return the Mars Solar date"""
-    j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+	
+// Return the Mars Solar date
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt)
+	
      var MSD = (((j2000_ott - 4.5)/1.027491252) + 44796.0 - 0.00096);
      return MSD;
-     }
+}
      
 function Clancy_Year(j2000_ott){
-	/*"""Returns the Mars Year date based on the reference date from Clancy(2000): 1955 April 11, 11am"""*/
-	var ref1955_4_11_11am = -16336.0416; // j2000 offset tt reference
-	var year = Math.floor(1 + (j2000_ott - ref1955_4_11_11am)/686.978);
-	return year;    
+// Returns the Mars Year date based on the reference date from Clancy(2000): 1955 April 11, 11am
+	
+var ref1955_4_11_11am = -16336.0416; // j2000 offset tt reference
+var year = Math.floor(1 + (j2000_ott - ref1955_4_11_11am)/686.978);
+return year;    
 }
 
 function Mars_Year(j2000_ott)
@@ -269,17 +303,21 @@ function Mars_Year(j2000_ott)
 }
 
 function Coordinated_Mars_Time(j2000_ott){
-/*    """The Mean Solar Time at the Prime Meridian"""
-    j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+	
+// The Mean Solar Time at the Prime Meridian
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt)
+	
     var MTC = 24 * (((j2000_ott - 4.5)/1.027491252) + 44796.0 - 0.00096);
     MTC = protected_mod(MTC, 24.);
     return MTC;
 }
 
 function Local_Mean_Solar_Time(longitude, j2000_ott){
-/*     """The Local Mean Solar Time given a planetographic (west) longitude"""
-    longitude = west longitude
-    j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+	
+// The Local Mean Solar Time given a planetographic (west) longitude
+// longitude = west longitude
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt)
+	
      var MTC = Coordinated_Mars_Time(j2000_ott);
      var LMST = MTC - longitude * (24/360.);
      LMST = protected_mod(LMST,  24);
@@ -287,9 +325,11 @@ function Local_Mean_Solar_Time(longitude, j2000_ott){
  }
  
 function Local_True_Solar_Time(longitude, j2000_ott){
-/*    """Local true solar time is the Mean solar time + equation of time perturbation"""  
-    longitude = west longitude
-    j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+	
+// Local true solar time is the Mean solar time + equation of time perturbation
+// longitude = west longitude
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) 
+	
     var eot = equation_of_time(j2000_ott);
     var lmst = Local_Mean_Solar_Time(longitude, j2000_ott);
     var ltst = lmst + eot*(24/360.);
@@ -298,8 +338,10 @@ function Local_True_Solar_Time(longitude, j2000_ott){
 }
 
 function subsolar_longitude(j2000_ott){
- /*   """returns the longitude of the subsolar point for a given julian day."""
-     j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+	
+// returns the longitude of the subsolar point for a given julian day
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt)
+	
     var MTC = Coordinated_Mars_Time(j2000_ott);
     var EOT = equation_of_time(j2000_ott)*24/360.;
     var subsol = (MTC + EOT)*(360/24.) + 180.;
@@ -307,8 +349,10 @@ function subsolar_longitude(j2000_ott){
 }
 
 function solar_declination(ls){
-/*     """Returns the solar declination""" 
-    ls = calculated by Mars_Ls*/
+	
+// Returns the solar declination
+// ls = calculated by Mars_Ls
+	
      var ls1 = ls * Math.PI/180.;
      var dec = Math.asin(0.42565 * Math.sin(ls1)) + 0.25*(Math.PI/180.) * Math.sin(ls1);
      dec = dec * 180. / Math.PI;
@@ -316,8 +360,10 @@ function solar_declination(ls){
  }
  
 function heliocentric_distance(j2000_ott){
-/*     """Instantaneous orbital radius"""
-    j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+	
+// Instantaneous orbital radius
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt)
+	
     var M = Mars_Mean_Anomaly(j2000_ott)*Math.PI/180.;
      
      var rm = 1.523679 * 
@@ -330,8 +376,10 @@ function heliocentric_distance(j2000_ott){
  }
  
 function heliocentric_longitude(j2000_ott){
-/*     """Heliocentric longitude, which is not Ls (offsets are different)"""
-    j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+	
+// Heliocentric longitude, which is not Ls (offsets are different)
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt)
+	
      var ls = Mars_Ls(j2000_ott);
      var im = ls + 85.061 - 
          0.015 * Math.sin((71+2*ls)*Math.PI/180.) - 
@@ -341,8 +389,10 @@ function heliocentric_longitude(j2000_ott){
  }
  
 function heliocentric_latitude(j2000_ott){
-/*     """Heliocentric Latitude, which is not Ls"""
-    j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+	
+// Heliocentric Latitude, which is not Ls
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt)
+	
      var ls        = Mars_Ls(j2000_ott); 
      var bm = -(1.8497 - 2.23e-5*j2000_ott)
          * Math.sin((ls - 144.50 + 2.57e-6*j2000_ott)*Math.PI/180.);
@@ -351,19 +401,23 @@ function heliocentric_latitude(j2000_ott){
  }
  
 function hourangle(longitude, j2000_ott){
-/*    """Hourangle is the longitude - subsolar longitude"""
-    longitude = west longitude
-    j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+	
+// Hourangle is the longitude - subsolar longitude
+// longitude = west longitude
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) 
+	
     var subsol = subsolar_longitude(j2000_ott)*Math.PI/180.;
     var hangle = longitude*Math.PI/180. - subsol;
     return hangle;
 }
 
 function solar_zenith(longitude,latitude, j2000_ott){
-/*    """Zenith Angle, angle between sun and nadir"""
-    longitude = west longitude
-    latitude = north latitude
-    j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+	
+// Zenith Angle, angle between sun and nadir
+// longitude = west longitude
+// latitude = north latitude
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt)
+	
     var ha = hourangle(longitude, j2000_ott);
     var ls = Mars_Ls(j2000_ott);
     var dec = solar_declination(ls)*Math.PI/180;
@@ -374,25 +428,28 @@ function solar_zenith(longitude,latitude, j2000_ott){
     return Z;
 }
 	
-function solar_elevation(longitude, latitude, j2000_ott){
- /*   """Elevation = 90-Zenith, angle between sun and flat surface """
-    longitude = west longitude
-    latitude = north latitude
-    j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+function solar_elevation(longitude, latitude, j2000_ott
+			  
+// Elevation = 90-Zenith, angle between sun and flat surface
+// longitude = west longitude
+// latitude = north latitude
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt)
+			  
     var Z = solar_zenith(longitude, latitude, j2000_ott);
     return 90. - Z;
 }
 
 function solar_azimuth(longitude, latitude, j2000_ott){
-/*     """Azimuth Angle, between sun and north pole"""
-    longitude = west longitude
-    latitude = north latitude
-    j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt) */
+	
+// Azimuth Angle, between sun and north pole
+// longitude = west longitude
+// latitude = north latitude
+// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt)
+	
      var ha = hourangle(longitude, j2000_ott);
      var ls = Mars_Ls(j2000_ott);
      var dec = solar_declination(ls)*Math.PI/180.;
-     var denom = (Math.cos(latitude)*Math.tan(dec)
-                  - Math.sin(latitude)*Math.cos(ha));
+     var denom = (Math.cos(latitude)*Math.tan(dec) - Math.sin(latitude)*Math.cos(ha));
  
      var num = Math.sin(ha) ;
  
