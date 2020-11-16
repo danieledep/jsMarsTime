@@ -168,7 +168,7 @@ function j2000_offset_tt(jday_tt) {
 }
 
 // Calculates the Mars Mean Anomaly given a j2000 julian day offset
-// j2000_ott = julian day in terrestrial time offset form j2000 (calculated by j2000_offset_tt)
+// j2000_ott = julian day in terrestrial time offset from j2000 (calculated by j2000_offset_tt)
 
 function Mars_Mean_Anomaly(j2000_ott) {
   var M = 19.387 + 0.52402075 * j2000_ott;
