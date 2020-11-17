@@ -307,7 +307,7 @@ function j2000_from_Mars_Solar_Date(msd) {
   return j2000_ott;
 }
 
-// Returns j200 based on MSD
+// Returns j2000 based on MSD
 // msd = mars solar date
 
 function j2000_ott_from_Mars_Solar_Date(msd) {
