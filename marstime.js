@@ -48,7 +48,7 @@ function j2000_epoch() {
   return 2451545.0;
 }
 
-// Returns the current time in milliseconds Math.since Jan 1 1970
+// Returns the current time in milliseconds since Jan 1 1970
 // no inputs
 
 function mills() {
@@ -56,7 +56,7 @@ function mills() {
   return d.getTime();
 }
 
-// Returns the julian day number given milliseconds Math.since Jan 1 1970
+// Returns the julian day number given milliseconds since Jan 1 1970
 // m = milliseconds
 
 function julian(m) {
